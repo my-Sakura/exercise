@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"net/http"
 	"sync"
@@ -25,12 +24,12 @@ func StringSliceHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		fmt.Fprintf(w, "%d", 500)
+		w.WriteHeader(http.StatusInternalServerError)
 	}
 
 	err = json.Unmarshal(body, &Req)
 	if err != nil {
-		fmt.Fprintf(w, "%d", 500)
+		w.WriteHeader(http.StatusInternalServerError)
 	}
 
 	var flag = true
@@ -54,7 +53,7 @@ func StringSliceHandler(w http.ResponseWriter, r *http.Request) {
 
 	response, err := json.Marshal(resp)
 	if err != nil {
-		fmt.Fprintf(w, "%d", 500)
+		w.WriteHeader(http.StatusInternalServerError)
 	}
 	w.Write(response)
 }
